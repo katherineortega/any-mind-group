@@ -1,0 +1,29 @@
+<div class="message-card" [ngClass]="'direction-' + direction">
+  <div class="message-user">
+    <div class="message-user-image">
+      <img [src]="user?.image" alt="user-avatar"/>
+    </div>
+    <p class="message-user-name">{{user?.name}}</p>
+  </div>
+
+  <div class="message-text">
+    <div class="message-text-bubble">
+      <p class="message-text-bubble-content">{{message?.text}}</p>
+      <span class="message-text-bubble-detail">{{message?.datetime}}</span>
+    </div>
+    <span class="message-text-status" [ngSwitch]="message?.status">
+          <img *ngSwitchCase="'loader'"
+               class="status-loader"
+               src="assets/icons/loader.svg"
+               alt="message-loader"/>
+          <img *ngSwitchCase="'check'"
+               class="status-check"
+               src="assets/icons/check-circle.svg"
+               alt="message-check"/>
+          <img *ngSwitchCase="'error'"
+               class="status-error"
+               src="assets/icons/error-circle.svg"
+               alt="message-error"/>
+      </span>
+  </div>
+</div>
