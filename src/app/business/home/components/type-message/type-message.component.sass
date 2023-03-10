@@ -1,0 +1,26 @@
+@use "src/styles/variables/colors.variables" as colors
+@use "src/styles/variables/typography.variables" as typography
+
+.type-message
+  padding: 16px
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  border-top: 2px solid colors.$neutral-30
+
+  .type-message-textarea
+    width: 100%
+    border-radius: 8px
+    outline: none
+    padding: 8px 16px
+    font-size: typography.$font-size-base
+    resize: none
+    min-height: 75px
+    border: 2px solid colors.$neutral-40
+    color: colors.$neutral-100
+    box-sizing: border-box
+    margin-bottom: 8px
+
+  .type-message-button
+    display: flex
+    justify-content: flex-end

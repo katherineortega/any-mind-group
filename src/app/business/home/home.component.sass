@@ -1,0 +1,75 @@
+@use "src/styles/variables/colors.variables" as colors
+@use "src/styles/variables/typography.variables" as typography
+
+.live-chat
+  display: flex
+  max-width: 768px
+  flex-direction: column
+  align-items: center
+  margin: 0 auto
+  padding: 40px 24px
+
+  header
+    margin-bottom: 32px
+
+  .live-chat-container
+    background-color: colors.$neutral-30
+    border-radius: 16px
+    box-shadow: 0 3px 5px rgba(colors.$neutral-100, .2)
+
+  .live-chat-title,
+  .live-chat-description
+    color: colors.$neutral-100
+    text-align: center
+
+  .live-chat-title
+    font-size: typography.$font-size-base * 2.5
+    margin: 8px 0
+    line-height: 2.5rem
+
+  .live-chat-description
+    margin: 0
+    font-size: typography.$font-size-base
+
+
+  .row
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    box-sizing: border-box
+    width: 100%
+    flex-direction: column
+
+    .column
+      width: 100%
+      position: relative
+      display: flex
+      flex-direction: column
+      box-sizing: border-box
+      margin: 0
+      max-width: 100%
+
+      &.first
+        flex: 0 0 100%
+        max-width: 100%
+
+      &.second
+        flex: 0 0 100%
+        max-width: 100%
+
+@media screen and (min-width: 768px)
+  .live-chat
+    max-width: 1280px
+
+    .row
+      flex-direction: row
+
+      .column
+
+        &.first
+          flex: 0 0 30%
+          max-width: 30%
+
+        &.second
+          flex: 0 0 70%
+          max-width: 70%

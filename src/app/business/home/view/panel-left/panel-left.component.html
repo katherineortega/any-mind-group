@@ -1,0 +1,9 @@
+<section class="panel-left">
+  <app-user-list
+    (user)="userSelected($event)"
+    (userList)="userList($event)">
+  </app-user-list>
+  <app-channel-list
+    (channel)="channelSelected($event)">
+  </app-channel-list>
+</section>

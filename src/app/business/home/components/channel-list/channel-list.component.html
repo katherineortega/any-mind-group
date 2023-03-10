@@ -1,0 +1,13 @@
+<section class="channel-list">
+  <h3 class="channel-list-title">Channels</h3>
+
+  <div class="channel-list-card">
+    <ng-container *ngFor="let channel of channelList">
+      <p class="channel-list-item"
+         [class.active]="channel.id === channelSelected?.id"
+         (click)="setSelectedChannel(channel)">
+        {{channel.name}}
+      </p>
+    </ng-container>
+  </div>
+</section>

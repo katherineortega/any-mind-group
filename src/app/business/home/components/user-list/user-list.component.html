@@ -1,0 +1,39 @@
+<section class="user-list">
+  <h3 class="user-list-title">User</h3>
+
+  <div class="user-list-container">
+
+    <div class="user-selected-card"
+         [class.skeleton]="!userSelected">
+      <div class="user-selected-info">
+        <img class="user-selected-avatar"
+             [src]="userSelected?.image"
+             [alt]="userSelected?.name">
+        <p class="user-selected-name">
+          {{userSelected?.name}}
+        </p>
+      </div>
+      <button class="user-selected-edit"
+              (click)="changeSelectedUser($event)"
+              #userSelectedEdit>
+        <img class="user-selected-edit-icon"
+             src="assets/icons/edit.svg"
+             alt="edit-icon">
+      </button>
+    </div>
+
+    <ng-container *ngIf="userListCardOpen">
+      <div class="user-list-card"
+           #userListCard>
+        <ng-container *ngFor="let user of userCollection">
+          <p class="user-list-item"
+             [class.active]="user.id === userSelected?.id"
+             (click)="setSelectedUser(user)">
+            {{user.name}}
+          </p>
+        </ng-container>
+      </div>
+    </ng-container>
+
+  </div>
+</section>

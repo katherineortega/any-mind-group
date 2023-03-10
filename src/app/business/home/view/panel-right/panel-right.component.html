@@ -1,0 +1,13 @@
+<section class="panel-right">
+  <header class="panel-right-header">
+    <h2 class="panel-right-title">{{channel?.name}}</h2>
+  </header>
+  <app-showcase-message [messageList]="messageList"
+                        [loadingMessageList]="loadingMessageList"
+                        [userSelected]="user"
+                        [userList]="userList">
+  </app-showcase-message>
+  <app-type-message (message)="postMessage($event)"
+                    [disabled]="!channel || !user">
+  </app-type-message>
+</section>

@@ -1,0 +1,13 @@
+<form class="type-message" (ngSubmit)="submitText($event)">
+  <textarea class="type-message-textarea"
+            name="textMessage"
+            [(ngModel)]="value"
+            [disabled]="disabled"
+            (ngModelChange)="saveText()"
+            placeholder="Type your message here..."></textarea>
+
+  <app-button type="submit"
+              [disabled]="disabled">
+    Send
+  </app-button>
+</form>

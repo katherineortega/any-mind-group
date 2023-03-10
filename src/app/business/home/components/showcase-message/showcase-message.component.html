@@ -1,0 +1,14 @@
+<section #showcaseMessage
+         [scrollTop]="showcaseMessage?.scrollHeight"
+         class="showcase-message">
+  <ng-container *ngFor="let message of messageList | reverse">
+    <app-message-card [user]="user(message)"
+                      [direction]="direction(message)"
+                      [message]="message"></app-message-card>
+  </ng-container>
+  <ng-container *ngFor="let message of loadingMessageList">
+    <app-message-card [user]="user(message)"
+                      [direction]="direction(message)"
+                      [message]="message"></app-message-card>
+  </ng-container>
+</section>

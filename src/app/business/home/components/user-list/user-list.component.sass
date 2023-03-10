@@ -1,0 +1,71 @@
+@use "src/styles/variables/colors.variables" as colors
+@use "src/styles/variables/typography.variables" as typography
+
+.user-list
+
+  .user-list-title
+    margin: 0 0 8px 16px
+
+  .user-list-container
+    position: relative
+
+.user-selected-card
+  border-radius: 8px
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 4px 4px 4px 16px
+  background-color: colors.$neutral-20
+
+  .user-selected-info
+    display: flex
+    align-items: center
+
+    .user-selected-avatar
+      width: 32px
+      height: 32px
+      margin-right: 8px
+
+    .user-selected-name
+      font-weight: typography.$font-weight-bold
+      margin: 0
+      margin-left: 8px
+
+  .user-selected-edit
+    border-radius: 8px
+    background-color: transparent
+    border: none
+    cursor: pointer
+    padding: 4px
+    width: 40px
+    height: 40px
+
+    &:hover
+      background-color: colors.$neutral-40
+
+    .user-selected-edit-icon
+      width: 24px
+
+
+.user-list-card
+  position: absolute
+  background-color: colors.$neutral-0
+  left: 100%
+  top: 0
+  border-radius: 8px
+  min-width: 180px
+  z-index: 10
+  overflow: hidden
+  box-shadow: 0 3px 5px rgba(colors.$neutral-100, .2)
+
+  .user-list-item
+    padding: 12px 24px
+    display: block
+    cursor: pointer
+    margin: 0
+
+    &:hover
+      background-color: colors.$neutral-30
+
+    &.active
+      background-color: colors.$neutral-20
