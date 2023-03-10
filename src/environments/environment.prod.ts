@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  api: 'https://angular-test-backend-yc4c5cvnnq-an.a.run.app/graphql'
+  api: 'https://angular-test-backend-yc4c5cvnnq-an.a.run.app/graphql',
+  local: 'assets/json/'
 };
