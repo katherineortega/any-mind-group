@@ -51,9 +51,19 @@ export class PanelRightComponent implements OnInit, OnDestroy {
   latestMessages(channel: Channel) {
     this.latestMessagesWatch = true;
     const subscription = this.messageImplement.latestMessages(channel.id)
-      .subscribe((messageList: Message[]) => {
-        this.messageList = messageList;
-        console.log(messageList);
+      .subscribe({
+        next: (messageList: Message[]) => {
+          this.messageList = messageList;
+          this.loadingMessageList = this.loadingMessageList.filter((message) => {
+            return message.status !== EMessageStatus.check;
+          });
+          console.log(messageList);
+          console.log(this.loadingMessageList);
+        },
+        error: () => {
+          this.messageList = [];
+          this.loadingMessageList = [];
+        }
       });
     this.subscriptionList.push(subscription);
   }
@@ -67,9 +77,15 @@ export class PanelRightComponent implements OnInit, OnDestroy {
 
     const subscription = this.messageImplement.sendMessage(
       this.channel?.id || EChannelId.Default, this.user?.id || EUserId.Default, message)
-      .subscribe((message: Message) => {
-        console.log(message);
-      })
+      .subscribe({
+        next: (message: Message) => {
+          this.loadingMessageList[0].messageId = message.messageId;
+          this.loadingMessageList[0].status = EMessageStatus.check;
+        },
+        error: () => {
+          this.loadingMessageList[0].status = EMessageStatus.error;
+        }
+      });
     this.subscriptionList.push(subscription);
   }
 
