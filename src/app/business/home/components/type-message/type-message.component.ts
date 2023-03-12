@@ -30,9 +30,11 @@ export class TypeMessageComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this.message.emit(this.value);
-    this.value = '';
-    this.textStoreImplement.setStoredText('');
+    if (this.value) {
+      this.message.emit(this.value.trim());
+      this.value = '';
+      this.textStoreImplement.setStoredText('');
+    }
   }
 
 }

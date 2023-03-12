@@ -1,14 +1,20 @@
 <section #showcaseMessage
-         [scrollTop]="showcaseMessage?.scrollHeight"
-         class="showcase-message">
-  <ng-container *ngFor="let message of messageList | reverse">
-    <app-message-card [user]="user(message)"
-                      [direction]="direction(message)"
-                      [message]="message"></app-message-card>
+         class="showcase-message"
+         (scroll)="scrollEvent()">
+  <ng-container *ngIf="moreMessagesLoader">
+    <h5 class="more-messages">
+      <span class="more-messages-text">Loading...</span>
+    </h5>
   </ng-container>
-  <ng-container *ngFor="let message of loadingMessageList">
-    <app-message-card [user]="user(message)"
-                      [direction]="direction(message)"
-                      [message]="message"></app-message-card>
+
+  <ng-container *ngFor="let message of messageList | reverse">
+    <ng-container *ngFor="let user of userList">
+      <ng-container *ngIf="user.id === message.userId">
+        <app-message-card [user]="user"
+                          [direction]="userSelected?.id === message.userId ? 'right' : 'left'"
+                          [message]="message"
+                          (retry)="retryMessageEvent($event)"></app-message-card>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </section>

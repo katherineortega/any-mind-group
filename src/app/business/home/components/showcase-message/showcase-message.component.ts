@@ -1,10 +1,10 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Input,
   OnChanges,
-  OnInit,
+  OnInit, Output, SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { Message } from "@models/message.model";
@@ -16,12 +16,15 @@ import { User } from "@models/user.model";
   styleUrls: ['./showcase-message.component.sass']
 })
 export class ShowcaseMessageComponent implements OnInit, OnChanges {
+  public moreMessagesLoader: boolean = false;
 
   @Input() messageList: Message[] = [];
-  @Input() loadingMessageList: Message[] = [];
+  @Input() totalMoreMessages: number = 0;
   @Input() userList: User[] = [];
   @Input() userSelected: User | null | undefined;
 
+  @Output() moreMessages: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() retryMessage: EventEmitter<Message> = new EventEmitter<Message>();
 
   @ViewChild('showcaseMessage') showcaseMessage: ElementRef | undefined;
 
@@ -33,21 +36,27 @@ export class ShowcaseMessageComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.changeDetector.detectChanges();
+
+    const element = this.showcaseMessage?.nativeElement;
+    if (element && !this.moreMessagesLoader) element.scrollTop = element.scrollHeight;
+    if (this.moreMessagesLoader && this.totalMoreMessages >= 10) element.scrollTop = 20;
+    this.moreMessagesLoader = false;
   }
 
-  user(message: Message): User | undefined {
-    if (!!this.messageList?.length && !!this.userList?.length) {
-      return this.userList.find((user) => user.id === message.userId);
+  retryMessageEvent(message: Message) {
+    this.retryMessage.emit(message);
+  }
+
+  scrollEvent() {
+    const element = this.showcaseMessage?.nativeElement;
+    const loadMoreMessages = this.totalMoreMessages >= 10 && element.scrollTop === 0;
+    if (loadMoreMessages && !this.moreMessagesLoader) {
+      this.moreMessagesLoader = loadMoreMessages
+      this.moreMessages.emit(true);
     }
-    return undefined;
   }
-
-  direction(message: Message) {
-    return this.userSelected?.id === message.userId ? 'right' : 'left';
-  }
-
 
 }
 

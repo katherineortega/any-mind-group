@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from "@models/user.model";
 import { Channel } from "@models/channel.model";
-import { PanelLeftStoreService } from "./panel-left-store.service";
+import { PanelLeftImplementService } from "./services/panel-left-implement.service";
 
 @Component({
   selector: 'app-panel-left',
@@ -11,7 +11,7 @@ import { PanelLeftStoreService } from "./panel-left-store.service";
 export class PanelLeftComponent implements OnInit {
 
   constructor(
-    private panelLeftStore: PanelLeftStoreService
+    private panelLeftImplement: PanelLeftImplementService
   ) {
   }
 
@@ -19,15 +19,15 @@ export class PanelLeftComponent implements OnInit {
   }
 
   userSelected(user: User) {
-    this.panelLeftStore.selectedUser = user;
+    this.panelLeftImplement.selectedUser = user;
   }
 
   userList(userList: User[]) {
-    this.panelLeftStore.userList = userList;
+    this.panelLeftImplement.userList = userList;
   }
 
   channelSelected(channel: Channel) {
-    this.panelLeftStore.selectedChannel = channel;
+    this.panelLeftImplement.selectedChannel = channel;
   }
 
 }

@@ -50,6 +50,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.chatImplement.userList()
       .subscribe((userList: User[]) => {
         this.userCollection = userList;
+        this.userList.emit(this.userCollection);
 
         const storedUser = this.userStoreImplement.getStoredUser();
         this.setSelectedUser(storedUser ? storedUser : userList[0]);
@@ -61,7 +62,6 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.userSelected = user;
       this.userStoreImplement.setStoredUser(user);
       this.user.emit(this.userSelected);
-      this.userList.emit(this.userCollection);
     }
   }
 

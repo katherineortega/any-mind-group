@@ -15,6 +15,12 @@ import { AtomsModule } from "@atoms/atoms.module";
 import { FormsModule } from "@angular/forms";
 import { OrganismsModule } from "@organisms/organisms.module";
 import { PipesModule } from "../../shared/pipes/pipes.module";
+import { PanelRightStoreService } from "./view/panel-right/services/panel-right-store.service";
+import { PanelLeftImplementService } from "./view/panel-left/services/panel-left-implement.service";
+import { PanelRightImplementService } from "./view/panel-right/services/panel-right-implement.service";
+import { PrLatestMessagesImplementService } from "./view/panel-right/services/pr-latest-messages-implement.service";
+import { PrMoreMessagesImplementService } from "./view/panel-right/services/pr-more-messages-implement.service";
+import { PrPostMessageImplementService } from "./view/panel-right/services/pr-post-message-implement.service";
 
 
 @NgModule({
@@ -36,6 +42,14 @@ import { PipesModule } from "../../shared/pipes/pipes.module";
     FormsModule,
     OrganismsModule,
     PipesModule
+  ],
+  providers: [
+    PanelLeftImplementService,
+    PanelRightStoreService,
+    PanelRightImplementService,
+    PrLatestMessagesImplementService,
+    PrMoreMessagesImplementService,
+    PrPostMessageImplementService
   ]
 })
 export class HomeModule {

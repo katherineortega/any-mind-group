@@ -11,6 +11,7 @@
       <p class="message-text-bubble-content">{{message?.text}}</p>
       <span class="message-text-bubble-detail">{{message?.datetime}}</span>
     </div>
+
     <span class="message-text-status" [ngSwitch]="message?.status">
           <img *ngSwitchCase="'loader'"
                class="status-loader"
@@ -24,6 +25,12 @@
                class="status-error"
                src="assets/icons/error-circle.svg"
                alt="message-error"/>
-      </span>
+    </span>
+
+    <ng-container *ngIf="message?.status === 'error'">
+      <span class="message-card-retry"
+            (click)="retryEvent()"
+      >Retry</span>
+    </ng-container>
   </div>
 </div>

@@ -3,9 +3,11 @@
     <h2 class="panel-right-title">{{channel?.name}}</h2>
   </header>
   <app-showcase-message [messageList]="messageList"
-                        [loadingMessageList]="loadingMessageList"
+                        [totalMoreMessages]="totalMoreMessages"
                         [userSelected]="user"
-                        [userList]="userList">
+                        [userList]="userList"
+                        (moreMessages)="loadMoreMessages()"
+                        (retryMessage)="retryMessage($event)">
   </app-showcase-message>
   <app-type-message (message)="postMessage($event)"
                     [disabled]="!channel || !user">

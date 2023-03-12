@@ -7,9 +7,10 @@ export class Message {
   datetime?: string;
   userId: EUserId;
   status: EMessageStatus;
+  previousMessageId?: string;
 
   constructor(iMessage: IMessage) {
-    this.messageId = iMessage.messageId;
+    this.messageId = iMessage?.messageId || '';
     this.text = iMessage.text;
     this.userId = iMessage.userId;
     this.status = iMessage.status || EMessageStatus.check;

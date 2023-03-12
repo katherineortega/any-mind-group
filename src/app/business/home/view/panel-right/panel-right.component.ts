@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PanelLeftStoreService } from "../panel-left/panel-left-store.service";
 import { Channel } from "@models/channel.model";
 import { User } from "@models/user.model";
-import { combineLatest, Subscription } from "rxjs";
-import { MessageImplementService } from "@implements/message/message-implement.service";
-import { EChannelId } from "@interfaces/channel.interface";
-import { EUserId } from "@interfaces/user.interface";
+import { Subscription } from "rxjs";
 import { Message } from "@models/message.model";
-import { EMessageStatus } from "@interfaces/message.interface";
+import { PanelRightStoreService } from "./services/panel-right-store.service";
+import { PrPostMessageImplementService } from "./services/pr-post-message-implement.service";
+import { PrMoreMessagesImplementService } from "./services/pr-more-messages-implement.service";
+import { PrLatestMessagesImplementService } from "./services/pr-latest-messages-implement.service";
+import { PanelRightImplementService } from "./services/panel-right-implement.service";
 
 @Component({
   selector: 'app-panel-right',
@@ -16,89 +16,67 @@ import { EMessageStatus } from "@interfaces/message.interface";
 })
 export class PanelRightComponent implements OnInit, OnDestroy {
   private subscriptionList: Array<Subscription> = [];
-  private latestMessagesWatch: boolean = false;
 
   public messageList: Message[] = [];
-  public loadingMessageList: Message[] = [];
   public channel: Channel | null | undefined;
   public user: User | null | undefined;
   public userList: User[] = [];
+  public totalMoreMessages: number = 0;
 
   constructor(
-    private panelLeftStore: PanelLeftStoreService,
-    private messageImplement: MessageImplementService,
+    private panelRightStore: PanelRightStoreService,
+    private panelRightImplement: PanelRightImplementService,
+    private prPostMessageImplement: PrPostMessageImplementService,
+    private prMoreMessagesImplement: PrMoreMessagesImplementService,
+    private prLatestMessagesImplement: PrLatestMessagesImplementService,
   ) {
   }
 
   ngOnInit(): void {
-    this.getSelectedUser();
-    const selectedChannel$ = this.panelLeftStore.selectedChannel$;
-    const userList$ = this.panelLeftStore.userList$;
+    this.panelRightImplement.getSelectedUser();
+    this.panelRightImplement.getChannelAndUserList();
 
-    const subscription = combineLatest([selectedChannel$, userList$])
-      .subscribe(([channel, userList]: [Channel | null, User[]]) => {
-        this.channel = channel;
-        this.userList = userList;
-        if (!!this.channel) {
-          this.latestMessagesWatch ?
-            this.messageImplement.refetchLatestMessages(this.channel.id) :
-            this.latestMessages(this.channel);
-        }
-      })
-    this.subscriptionList.push(subscription);
+    const subscriptionMessageList = this.panelRightStore.messageList$
+      .subscribe((messageList: Message[]) => this.messageList = messageList);
+    const subscriptionUser = this.panelRightStore.user$
+      .subscribe((user: User | null | undefined) => this.user = user);
+    const subscriptionUserList = this.panelRightStore.userList$
+      .subscribe((userList: User[]) => this.userList = userList);
+    const subscriptionChannel = this.panelRightStore.channel$
+      .subscribe((channel: Channel | null | undefined) => this.channel = channel);
+    const subscriptionTotalMoreMessages = this.panelRightStore.totalMoreMessages$
+      .subscribe((totalMoreMessages: number) => this.totalMoreMessages = totalMoreMessages);
+
+    this.subscriptionList.push(
+      subscriptionMessageList,
+      subscriptionUser,
+      subscriptionUserList,
+      subscriptionChannel,
+      subscriptionTotalMoreMessages
+    );
   }
 
-  latestMessages(channel: Channel) {
-    this.latestMessagesWatch = true;
-    const subscription = this.messageImplement.latestMessages(channel.id)
-      .subscribe({
-        next: (messageList: Message[]) => {
-          this.messageList = messageList;
-          this.loadingMessageList = this.loadingMessageList.filter((message) => {
-            return message.status !== EMessageStatus.check;
-          });
-          console.log(messageList);
-          console.log(this.loadingMessageList);
-        },
-        error: () => {
-          this.messageList = [];
-          this.loadingMessageList = [];
-        }
-      });
-    this.subscriptionList.push(subscription);
+  loadMoreMessages() {
+    this.prMoreMessagesImplement.loadMoreMessages();
   }
 
   postMessage(message: string) {
-    this.loadingMessageList = [new Message({
-      userId: EUserId.Sam,
-      text: message,
-      status: EMessageStatus.loader
-    }), ...this.loadingMessageList];
-
-    const subscription = this.messageImplement.sendMessage(
-      this.channel?.id || EChannelId.Default, this.user?.id || EUserId.Default, message)
-      .subscribe({
-        next: (message: Message) => {
-          this.loadingMessageList[0].messageId = message.messageId;
-          this.loadingMessageList[0].status = EMessageStatus.check;
-        },
-        error: () => {
-          this.loadingMessageList[0].status = EMessageStatus.error;
-        }
-      });
-    this.subscriptionList.push(subscription);
+    this.prPostMessageImplement.postMessage(message);
   }
 
-  getSelectedUser() {
-    this.panelLeftStore.selectedUser$
-      .subscribe((user: User | null) => this.user = user)
+  retryMessage(postMessage: Message) {
+    this.prPostMessageImplement.retryMessage(postMessage);
   }
 
 
   ngOnDestroy(): void {
     this.subscriptionList
       .forEach((subscription: Subscription) => subscription.unsubscribe())
-
+    this.panelRightStore.destroyPanelRightStore();
+    this.panelRightImplement.destroyPanelRightImplement();
+    this.prPostMessageImplement.destroyPrPostMessageImplement();
+    this.prMoreMessagesImplement.destroyPrMoreMessagesImplement();
+    this.prLatestMessagesImplement.destroyPrLatestMessagesImplement();
   }
 
 }
